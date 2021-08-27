@@ -20,4 +20,16 @@ public class StatusComponent {
 	public TextComponent getComponent() {
 		return component;
 	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public int getLength() {
+		return component.content().length();
+	}
+	
+	public boolean hasName(String name) {
+		return name.equalsIgnoreCase(name);
+	}
 }
