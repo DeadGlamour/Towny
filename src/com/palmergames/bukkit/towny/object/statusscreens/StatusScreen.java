@@ -65,6 +65,10 @@ public class StatusScreen {
 		return components.get(name);
 	}
 	
+	public boolean replaceComponent(String name, TextComponent component) {
+		return components.replace(name, component) != null;
+	}
+	
 	public List<TextComponent> getFormattedStatusScreen() {
 		List<TextComponent> lines = new ArrayList<>();
 		TextComponent line = Component.empty();

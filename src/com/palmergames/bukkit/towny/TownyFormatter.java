@@ -281,10 +281,10 @@ public class TownyFormatter {
 		
 		out.addAll(getExtraFields(resident));
 		
-		ResidentStatusScreenEvent event = new ResidentStatusScreenEvent(resident);
-		Bukkit.getPluginManager().callEvent(event);
-		if (event.hasAdditionalLines())
-			out.addAll(event.getAdditionalLines());
+//		ResidentStatusScreenEvent event = new ResidentStatusScreenEvent(resident);
+//		Bukkit.getPluginManager().callEvent(event);
+//		if (event.hasAdditionalLines())
+//			out.addAll(event.getAdditionalLines());
 		
 		out = formatStatusScreens(out);
 		return out;
@@ -498,14 +498,15 @@ public class TownyFormatter {
 		}
 		// Add any metadata which opt to be visible.
 		List<String> fields = getExtraFields(town);
-		for (int i = 0; i < fields.size() -1; i++) 
-			screen.addComponentOf("extraField" + i, fields.get(i));
+		if (!fields.isEmpty())
+			for (int i = 0; i < fields.size() -1; i++) 
+				screen.addComponentOf("extraField" + i, fields.get(i));
 		
-//		
-//		TownStatusScreenEvent event = new TownStatusScreenEvent(town);
-//		Bukkit.getPluginManager().callEvent(event);
-//		if (event.hasAdditionalLines())
-//			out.addAll(event.getAdditionalLines());
+		TownStatusScreenEvent event = new TownStatusScreenEvent(screen, town);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.hasAdditionalLines())
+			for (int i = 0; i < event.getAdditionalLines().size() - 1; i++)
+				screen.addComponentOf("eventAddedLines"+i, event.getAdditionalLines().get(i));
 
 		return screen;
 
@@ -639,10 +640,10 @@ public class TownyFormatter {
 
 		out.addAll(getExtraFields(nation));
 		
-		NationStatusScreenEvent event = new NationStatusScreenEvent(nation);
-		Bukkit.getPluginManager().callEvent(event);
-		if (event.hasAdditionalLines())
-			out.addAll(event.getAdditionalLines());
+//		NationStatusScreenEvent event = new NationStatusScreenEvent(nation);
+//		Bukkit.getPluginManager().callEvent(event);
+//		if (event.hasAdditionalLines())
+//			out.addAll(event.getAdditionalLines());
 		
 		out = formatStatusScreens(out);
 		return out;
