@@ -17,7 +17,6 @@ import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.object.Translation;
 import com.palmergames.bukkit.towny.object.Translator;
 import com.palmergames.bukkit.towny.object.metadata.CustomDataField;
-import com.palmergames.bukkit.towny.object.statusscreens.StatusComponent;
 import com.palmergames.bukkit.towny.object.statusscreens.StatusScreen;
 import com.palmergames.bukkit.towny.object.statusscreens.StatusScreenType;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
@@ -360,8 +359,8 @@ public class TownyFormatter {
 
 		final Translator translator = Translator.locale(locale);
 
-		StatusScreen screen = new StatusScreen(StatusScreenType.TOWN_STATUS, new LinkedHashMap<String, StatusComponent>());
-		screen.addComponent(StatusComponent.of("title", Component.text(ChatTools.formatTitle(town))));
+		StatusScreen screen = new StatusScreen(StatusScreenType.TOWN_STATUS, new LinkedHashMap<>());
+		screen.addComponentOf("title", Component.text(ChatTools.formatTitle(town)));
 		
 		TownyWorld world = town.getHomeblockWorld();
 		// ___[ Raccoon City ]___
@@ -378,59 +377,59 @@ public class TownyFormatter {
 		if (town.isConquered())
 			sub.add(translator.of("msg_conquered"));
 		if (!sub.isEmpty())
-			screen.addComponent(new StatusComponent("subtitle", Component.text(ChatTools.formatSubTitle(StringMgmt.join(sub, " ")))));
+			screen.addComponentOf("subtitle", ChatTools.formatSubTitle(StringMgmt.join(sub, " ")));
 		
 		// Board: Get your fried chicken
 		if (town.getBoard() != null && !town.getBoard().isEmpty())
-			screen.addComponentOf("board", Component.text(translator.of("status_town_board", town.getBoard())));
+			screen.addComponentOf("board", translator.of("status_town_board", town.getBoard()));
 
 		// Created Date
 		if (town.getRegistered() != 0) 
-			screen.addComponentOf("registered", Component.text(translator.of("status_founded", registeredFormat.format(town.getRegistered()))));
+			screen.addComponentOf("registered", translator.of("status_founded", registeredFormat.format(town.getRegistered())));
 
 		// Town Size: 0 / 16 [Bought: 0/48] [Bonus: 0] [Home: 33,44]
-		screen.addComponentOf("townblocks", Component.text(translator.of("status_town_size_part_1", town.getTownBlocks().size(), TownySettings.getMaxTownBlocks(town)) +
+		screen.addComponentOf("townblocks", translator.of("status_town_size_part_1", town.getTownBlocks().size(), TownySettings.getMaxTownBlocks(town)) +
 	            (TownySettings.isSellingBonusBlocks(town) ? translator.of("status_town_size_part_2", town.getPurchasedBlocks(), TownySettings.getMaxPurchasedBlocks(town)) : "") + 
 	            (town.getBonusBlocks() > 0 ? translator.of("status_town_size_part_3", town.getBonusBlocks()) : "") + 
 	            (TownySettings.getNationBonusBlocks(town) > 0 ? translator.of("status_town_size_part_4", TownySettings.getNationBonusBlocks(town)) : "") + 
 	            (town.isPublic() ? translator.of("status_town_size_part_5") + 
 	            		(TownySettings.getTownDisplaysXYZ() ? (town.hasSpawn() ? BukkitTools.convertCoordtoXYZ(town.getSpawnOrNull()) : translator.of("status_no_town"))  + "]" 
 	            				: (town.hasHomeBlock() ? town.getHomeBlockOrNull().getCoord().toString() : translator.of("status_no_town")) + "]") : "")
-	           ));
+	           );
 
 		if (TownySettings.isAllowingOutposts()) {
 			if (TownySettings.isOutpostsLimitedByLevels()) {
 				if (town.hasOutpostSpawn())
 					if (!town.hasNation())
-						screen.addComponentOf("outposts", Component.text(translator.of("status_town_outposts", town.getMaxOutpostSpawn(), town.getOutpostLimit())));
+						screen.addComponentOf("outposts", translator.of("status_town_outposts", town.getMaxOutpostSpawn(), town.getOutpostLimit()));
 					else {
 						int nationBonus = (Integer) TownySettings.getNationLevel(town.getNationOrNull()).get(TownySettings.NationLevel.NATION_BONUS_OUTPOST_LIMIT);
-						screen.addComponentOf("outposts", Component.text(translator.of("status_town_outposts", town.getMaxOutpostSpawn(), town.getOutpostLimit()) + 
+						screen.addComponentOf("outposts", translator.of("status_town_outposts", town.getMaxOutpostSpawn(), town.getOutpostLimit()) + 
 								(nationBonus > 0 ? translator.of("status_town_outposts2", nationBonus) : "")
-							   ));
+							   );
 						}
 					
 				else 
-					screen.addComponentOf("outposts", Component.text(translator.of("status_town_outposts3", town.getOutpostLimit())));
+					screen.addComponentOf("outposts", translator.of("status_town_outposts3", town.getOutpostLimit()));
 			} else if (town.hasOutpostSpawn()) {
-				screen.addComponentOf("outposts", Component.text(translator.of("status_town_outposts4", town.getMaxOutpostSpawn())));
+				screen.addComponentOf("outposts", translator.of("status_town_outposts4", town.getMaxOutpostSpawn()));
 			}
 		}
 
 		// Permissions: B=rao D=--- S=ra-
-		screen.addComponentOf("perm1", Component.text(translator.of("status_perm") + town.getPermissions().getColourString().replace("f", "r")));
-		screen.addComponentOf("perm2", Component.text(translator.of("status_perm") + town.getPermissions().getColourString2().replace("f", "r")));
-		screen.addComponentOf("perm3", Component.text(translator.of("explosions2") + ((town.isBANG() || world.isForceExpl()) ? translator.of("status_on"): translator.of("status_off")) + 
+		screen.addComponentOf("perm1", translator.of("status_perm") + town.getPermissions().getColourString().replace("f", "r"));
+		screen.addComponentOf("perm2", translator.of("status_perm") + town.getPermissions().getColourString2().replace("f", "r"));
+		screen.addComponentOf("perm3", translator.of("explosions2") + ((town.isBANG() || world.isForceExpl()) ? translator.of("status_on"): translator.of("status_off")) + 
 				translator.of("firespread") + ((town.isFire() || world.isForceFire()) ? translator.of("status_on"): translator.of("status_off")) + 
-				translator.of("mobspawns") + ((town.hasMobs() || world.isForceTownMobs()) ? translator.of("status_on"): translator.of("status_off"))));
+				translator.of("mobspawns") + ((town.hasMobs() || world.isForceTownMobs()) ? translator.of("status_on"): translator.of("status_off")));
 
 		if (town.isRuined()) {
-			screen.addComponentOf("ruinedTime", Component.text(translator.of("msg_time_remaining_before_full_removal", TownRuinSettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town))));
+			screen.addComponentOf("ruinedTime", translator.of("msg_time_remaining_before_full_removal", TownRuinSettings.getTownRuinsMaxDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
 			if (TownRuinSettings.getTownRuinsReclaimEnabled()) {
 				if (TownRuinUtil.getTimeSinceRuining(town) < TownRuinSettings.getTownRuinsMinDurationHours())
-					screen.addComponentOf("reclaim", Component.text(translator.of("msg_time_until_reclaim_available", TownRuinSettings.getTownRuinsMinDurationHours() - TownRuinUtil.getTimeSinceRuining(town))));
+					screen.addComponentOf("reclaim", translator.of("msg_time_until_reclaim_available", TownRuinSettings.getTownRuinsMinDurationHours() - TownRuinUtil.getTimeSinceRuining(town)));
 				else 
-					screen.addComponentOf("reclaim", Component.text(translator.of("msg_reclaim_available")));
+					screen.addComponentOf("reclaim", translator.of("msg_reclaim_available"));
 			}
 			// Only display the remaining fields if town is not ruined
 		} else {
@@ -451,7 +450,7 @@ public class TownyFormatter {
 					bankString += translator.of("status_bank_town_penalty_upkeep", TownySettings.getTownPenaltyUpkeepCost(town));
 				bankString += translator.of("status_bank_town3", town.getTaxes()) + (town.isTaxPercentage() ? "%" : "");
 
-				screen.addComponentOf("bankstring", Component.text(bankString));
+				screen.addComponentOf("bankstring", bankString);
 			}
 
 			// Nation: Azur Empire
@@ -483,7 +482,7 @@ public class TownyFormatter {
 			List<String> ranklist = new ArrayList<>();
 			getRanks(town, ranklist, locale);
 			for (String string : ranklist) 
-				screen.addComponentOf("ranks", Component.text(string));
+				screen.addComponentOf("ranks", string);
 
 			// Residents [12]: James, Carry, Mason
 			String[] residents = getFormattedNames(town.getResidents().toArray(new Resident[0]));
@@ -500,7 +499,7 @@ public class TownyFormatter {
 		// Add any metadata which opt to be visible.
 		List<String> fields = getExtraFields(town);
 		for (int i = 0; i < fields.size() -1; i++) 
-			screen.addComponentOf("extraField" + i, Component.text(fields.get(i)));
+			screen.addComponentOf("extraField" + i, fields.get(i));
 		
 //		
 //		TownStatusScreenEvent event = new TownStatusScreenEvent(town);

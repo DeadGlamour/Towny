@@ -18,28 +18,28 @@ public class StatusScreen {
 	public StatusScreen() {}
 	
 	StatusScreenType type;
-	Map<String, StatusComponent> components = new LinkedHashMap<>();
+	Map<String, TextComponent> components = new LinkedHashMap<>();
 	final static int maxWidth = ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH;
 	final TextComponent space = Component.text(" ").color(NamedTextColor.WHITE);
 	
-	public StatusScreen(StatusScreenType type, Map<String, StatusComponent> components) {
+	public StatusScreen(StatusScreenType type, LinkedHashMap<String, TextComponent> components) {
 		this.type = type;
 		this.components = components;
 	}
 
-	public void addComponentOf(String name, TextComponent component) {
-		components.put(name, StatusComponent.of(name, component));
+	public void addComponentOf(String name, String component) {
+		components.put(name, Component.text(component));
 	}
-
-	public void addComponent(StatusComponent component) {
-		components.put(component.getName(), component);
+	
+	public void addComponentOf(String name, TextComponent component) {
+		components.put(name, component);
 	}
 
 	public void removeStatusComponent(String name) {
 		components.remove(name);
 	}
 	
-	public Collection<StatusComponent> getComponents() {
+	public Collection<TextComponent> getComponents() {
 		return Collections.unmodifiableCollection(components.values());
 	}
 	
@@ -47,22 +47,22 @@ public class StatusScreen {
 		return components.containsKey(name);
 	}
 	
-	public StatusComponent getStatusComponentOrNull(String name) {
+	public TextComponent getComponentOrNull(String name) {
 		return components.get(name);
 	}
 	
 	public List<TextComponent> getFormattedStatusScreen() {
 		List<TextComponent> lines = new ArrayList<>();
 		TextComponent line = Component.empty();
-		List<StatusComponent> components = new ArrayList<>(this.components.values());
+		List<TextComponent> components = new ArrayList<>(this.components.values());
 		String string = "";
 		for (int i = 0; i <= components.size() - 1; i++) {
 			if (line.content().isEmpty()) {
-				line = components.get(i).getComponent();
+				line = components.get(i);
 				string = line.content();
 				continue;
 			}
-			TextComponent nextComp = components.get(i).getComponent();
+			TextComponent nextComp = components.get(i);
 			if ((string.length() + nextComp.content().length() + 1) > maxWidth) {
 				lines.add(line);
 				line = nextComp;
