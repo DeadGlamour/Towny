@@ -274,10 +274,10 @@ public class TownyPermission {
 	}
 	
 	public String getColourString() {
-		return getColoredPermLevel(ActionType.BUILD) + getColoredPermLevel(ActionType.DESTROY, " Destroy");
+		return getColoredPermLevel(ActionType.BUILD) + " " + getColoredPermLevel(ActionType.DESTROY);
 	}
 	public String getColourString2() {
-		return getColoredPermLevel(ActionType.SWITCH) + getColoredPermLevel(ActionType.ITEM_USE, " Item");
+		return getColoredPermLevel(ActionType.SWITCH) + " " + getColoredPermLevel(ActionType.ITEM_USE);
 	}
 
 	public void loadDefault(TownBlockOwner owner) {
