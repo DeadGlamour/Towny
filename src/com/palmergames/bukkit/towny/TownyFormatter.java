@@ -360,7 +360,7 @@ public class TownyFormatter {
 		final Translator translator = Translator.locale(locale);
 
 		StatusScreen screen = new StatusScreen(StatusScreenType.TOWN_STATUS, new LinkedHashMap<>());
-		screen.addComponentOf("title", Component.text(ChatTools.formatTitle(town)));
+		screen.addComponentOf("title", ChatTools.formatTitle(town));
 		
 		TownyWorld world = town.getHomeblockWorld();
 		// ___[ Raccoon City ]___
@@ -463,19 +463,19 @@ public class TownyFormatter {
 					System.arraycopy(entire, 0, towns2, 0, 11);
 					towns2[11] = translator.of("status_town_reslist_overlength");
 				}		
-				screen.addComponentOf("nation", Component.text(translator.of("status_town_nation", town.getNationOrNull().getName()))
-						.hoverEvent(HoverEvent.showText(Component.text(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingNation(), town.getNationOrNull().getFormattedName())))
+				screen.addComponentOf("nation", translator.of("status_town_nation", town.getNationOrNull().getName()), 
+						HoverEvent.showText(Component.text(Colors.translateColorCodes(String.format(TownySettings.getPAPIFormattingNation(), town.getNationOrNull().getFormattedName())))
 								.append(Component.newline())
 								.append(Component.text(translator.of("status_nation_king", town.getNationOrNull().getCapital().getMayor().getFormattedName()))
 								.append(Component.newline())
-								.append(Component.text(translator.of("status_nation_towns", town.getNationOrNull().getNumTowns()) + StringMgmt.join(towns2, ", "))))))
-						.clickEvent(ClickEvent.runCommand("/towny:nation " + town.getNationOrNull().getName()))
+								.append(Component.text(translator.of("status_nation_towns", town.getNationOrNull().getNumTowns()) + StringMgmt.join(towns2, ", "))))),
+						ClickEvent.runCommand("/towny:nation " + town.getNationOrNull().getName())
 						);
 			}
 			// Mayor: MrSand
-			screen.addComponentOf("mayor", Component.text(translator.of("rank_list_mayor", town.getMayor().getFormattedName()))
-					.hoverEvent(HoverEvent.showText(Component.text(translator.of("registered_last_online", registeredFormat.format(town.getMayor().getRegistered()), lastOnlineFormatIncludeYear.format(town.getMayor().getLastOnline())))))
-					.clickEvent(ClickEvent.runCommand("/towny:resident " + town.getMayor().getName()))
+			screen.addComponentOf("mayor", translator.of("rank_list_mayor", town.getMayor().getFormattedName()),
+					HoverEvent.showText(Component.text(translator.of("registered_last_online", registeredFormat.format(town.getMayor().getRegistered()), lastOnlineFormatIncludeYear.format(town.getMayor().getLastOnline())))),
+					ClickEvent.runCommand("/towny:resident " + town.getMayor().getName())
 					);
 
 			// Assistants [2]: Sammy, Ginger
@@ -492,8 +492,8 @@ public class TownyFormatter {
 				System.arraycopy(entire, 0, residents, 0, 35);
 				residents[35] = translator.of("status_town_reslist_overlength");
 			}
-			screen.addComponentOf("residents", Component.text(translator.of("status_town_reslist", town.getNumResidents()) + StringMgmt.join(residents, ", ")
-				).clickEvent(ClickEvent.runCommand("/towny:town reslist "+ town.getName())));
+			screen.addComponentOf("residents", translator.of("status_town_reslist", town.getNumResidents()) + StringMgmt.join(residents, ", "),
+				ClickEvent.runCommand("/towny:town reslist "+ town.getName()));
 
 		}
 		// Add any metadata which opt to be visible.

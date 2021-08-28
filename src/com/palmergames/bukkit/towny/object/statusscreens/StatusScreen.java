@@ -10,6 +10,8 @@ import org.bukkit.util.ChatPaginator;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 
@@ -33,6 +35,18 @@ public class StatusScreen {
 	
 	public void addComponentOf(String name, TextComponent component) {
 		components.put(name, component);
+	}
+	
+	public void addComponentOf(String name, String text, ClickEvent click) {
+		components.put(name, Component.text(text).clickEvent(click));
+	}
+	
+	public void addComponentOf(String name, String text, HoverEvent hover) {
+		components.put(name, Component.text(text).hoverEvent(hover));
+	}
+	
+	public void addComponentOf(String name, String text, HoverEvent hover, ClickEvent click) {
+		components.put(name, Component.text(text).hoverEvent(hover).clickEvent(click));
 	}
 
 	public void removeStatusComponent(String name) {
