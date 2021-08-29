@@ -401,7 +401,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 			final Nation nation = TownyUniverse.getInstance().getNation(split[0]);
 
 			if (nation != null) {
-				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyMessaging.sendMessage(sender, TownyFormatter.getStatus(nation)));
+				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(nation)));
 			}
 			else {
 				TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_err_not_registered_1", split[0]));
@@ -428,7 +428,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 					try {
 						Town town = resident.getTown();
 						Nation nation = town.getNation();
-						TownyMessaging.sendMessage(player, TownyFormatter.getStatus(nation, Translation.getLocale(player)));
+						TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(nation, Translation.getLocale(player)));
 					} catch (NotRegisteredException ignore) {
 					}
 				});
@@ -703,7 +703,7 @@ public class NationCommand extends BaseCommand implements CommandExecutor {
 						if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_NATION_OTHERNATION.getNode()) && ( (resident.hasTown() && resident.getTown().hasNation() && (resident.getTown().getNation() != nation) )  || !resident.hasTown() )) {
 							throw new TownyException(Translatable.of("msg_err_command_disable"));
 						}
-						Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(), () -> TownyMessaging.sendMessage(player, TownyFormatter.getStatus(nation)));
+						Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(), () -> TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(nation)));
 
 					} catch (NotRegisteredException ex) {
 						TownyMessaging.sendErrorMsg(player, ex.getMessage(player));

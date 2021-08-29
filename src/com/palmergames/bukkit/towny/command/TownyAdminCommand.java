@@ -1068,7 +1068,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			Resident resident = getResidentOrThrow(split[0]);
 
 			if (split.length == 1) {
-				TownyMessaging.sendMessage(getSender(), TownyFormatter.getStatus(resident, player));
+				TownyMessaging.sendStatusScreen(getSender(), TownyFormatter.getStatus(resident, player));
 				return;
 			}
 						
@@ -1424,7 +1424,7 @@ public class TownyAdminCommand extends BaseCommand implements CommandExecutor {
 			}
 			
 			if (split.length == 1) {
-				TownyMessaging.sendMessage(getSender(), TownyFormatter.getStatus(nation));
+				TownyMessaging.sendStatusScreen(getSender(), TownyFormatter.getStatus(nation));
 				return;
 			}
 

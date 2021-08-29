@@ -226,7 +226,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			if (resOpt.isPresent()) {
 				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
 					Player player = null;
-					TownyMessaging.sendMessage(sender, TownyFormatter.getStatus(resOpt.get(), player));
+					TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(resOpt.get(), player));
 				});
 			}
 			else {
@@ -244,7 +244,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			if (split.length == 0) {
 				Resident res = getResidentOrThrow(player.getUniqueId());
 
-				TownyMessaging.sendMessage(player, TownyFormatter.getStatus(res, player, Translation.getLocale(player)));
+				TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(res, player, Translation.getLocale(player)));
 			} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 				
 				HelpMenu.RESIDENT_HELP.send(player);
@@ -373,7 +373,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 					throw new TownyException(Translatable.of("msg_err_command_disable"));
 				}
 				Bukkit.getScheduler().runTaskAsynchronously(Towny.getPlugin(),
-					() -> TownyMessaging.sendMessage(player, TownyFormatter.getStatus(resident, player, Translation.getLocale(player)))
+					() -> TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(resident, player, Translation.getLocale(player)))
 				);
 			}
 

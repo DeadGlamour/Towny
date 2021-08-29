@@ -2199,8 +2199,8 @@ public class PlotCommand extends BaseCommand implements CommandExecutor {
 		}
 
 		if (TownyAPI.getInstance().isWilderness(coord))
-			TownyMessaging.sendMessage(player, TownyFormatter.getStatus(TownyAPI.getInstance().getTownyWorld(world), Translation.getLocale(player)));
+			TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(TownyAPI.getInstance().getTownyWorld(world), Translation.getLocale(player)));
 		else
-			TownyMessaging.sendMessage(player, TownyFormatter.getStatus(coord.getTownBlockOrNull(), Translation.getLocale(player)));
+			TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(coord.getTownBlockOrNull(), Translation.getLocale(player)));
 	}
 }
