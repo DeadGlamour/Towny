@@ -177,7 +177,7 @@ public class TownyWorldCommand extends BaseCommand implements CommandExecutor {
 
 		if (split.length == 0) {
 			if (player == null)
-				TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(Globalworld));
+				TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(Globalworld, Translation.getLocale(sender)));
 			else
 				TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(Globalworld, Translation.getLocale(player)));
 

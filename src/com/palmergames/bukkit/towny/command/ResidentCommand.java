@@ -223,15 +223,10 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 
 		} else {
 			final Optional<Resident> resOpt = Optional.ofNullable(TownyUniverse.getInstance().getResident(split[0]));
-			if (resOpt.isPresent()) {
-				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-					Player player = null;
-					TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(resOpt.get(), player));
-				});
-			}
-			else {
+			if (resOpt.isPresent())
+				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyMessaging.sendStatusScreen(sender, TownyFormatter.getStatus(resOpt.get(), null, Translation.getDefaultLocale())));
+			else
 				throw new TownyException(Translatable.of("msg_err_not_registered_1", split[0]));
-			}
 		}
 		
 	}
@@ -244,7 +239,7 @@ public class ResidentCommand extends BaseCommand implements CommandExecutor {
 			if (split.length == 0) {
 				Resident res = getResidentOrThrow(player.getUniqueId());
 
-				TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(res, player, Translation.getLocale(player)));
+				Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> TownyMessaging.sendStatusScreen(player, TownyFormatter.getStatus(res, player, Translation.getLocale(player))));
 			} else if (split[0].equalsIgnoreCase("?") || split[0].equalsIgnoreCase("help")) {
 				
 				HelpMenu.RESIDENT_HELP.send(player);

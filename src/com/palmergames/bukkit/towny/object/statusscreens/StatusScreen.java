@@ -80,6 +80,12 @@ public class StatusScreen {
 				string = line.content();
 				continue;
 			}
+			if (components.get(i).equals(Component.newline())) {
+				lines.add(line);
+				line = Component.empty();
+				string = "";
+				continue;
+			}
 			TextComponent nextComp = components.get(i);
 			if ((string.length() + nextComp.content().length() + 1) > maxWidth) {
 				lines.add(line);

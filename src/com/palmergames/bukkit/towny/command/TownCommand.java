@@ -269,6 +269,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 				case "join":
 				case "merge":
 				case "plotgrouplist":
+				case "ranklist":
 					if (args.length == 2)
 						return getTownyStartingWith(args[1], "t");
 					break;
@@ -728,10 +729,19 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 					if (!permSource.testPermission(player, PermissionNodes.TOWNY_COMMAND_TOWN_RANKLIST.getNode()))
 						throw new TownyException(Translatable.of("msg_err_command_disable"));
 
-					Resident resident = getResidentOrThrow(player.getUniqueId());
-					if (!resident.hasTown())
-						throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
-					TownyMessaging.sendMessage(player, TownyFormatter.getRanks(resident.getTown()));
+					Town town;
+					if (split.length > 1) {
+						town = TownyUniverse.getInstance().getDataSource().getTown(split[1]);
+						if (town == null)
+							throw new TownyException(Translatable.of("msg_err_invalid_name", split[1]));
+					} else {
+						Resident resident = getResidentOrThrow(player.getUniqueId());
+						if (!resident.hasTown())
+							throw new TownyException(Translatable.of("msg_err_dont_belong_town"));
+						else 
+							town = resident.getTownOrNull();
+					}
+					TownyMessaging.sendMessage(player, TownyFormatter.getRanksForTown(town, Translation.getLocale(player)));
 
 				} else if (split[0].equalsIgnoreCase("add")) {
 
@@ -4102,9 +4112,10 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 			town = TownyUniverse.getInstance().getTown(args[1]);
 		}
 		
-		if (town != null)
-			TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedResidents(town));
-		else 
+		if (town != null) {
+			TownyMessaging.sendMessage(player, ChatTools.formatTitle(town.getName() + " " + Translatable.of("res_list").forLocale(player)));
+			TownyMessaging.sendMessage(sender, TownyFormatter.getFormattedTownyObjects(Translatable.of("res_list").forLocale(sender), new ArrayList<>(town.getResidents())));
+		} else 
 			TownyMessaging.sendErrorMsg(sender, Translatable.of("msg_specify_name"));
 	}
 	
@@ -4167,7 +4178,7 @@ public class TownCommand extends BaseCommand implements CommandExecutor {
 		}
 		
 		if (town != null)
-			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedOutlaws(town));
+			TownyMessaging.sendMessage(player, TownyFormatter.getFormattedTownyObjects(Translatable.of("outlaws").forLocale(sender), new ArrayList<>(town.getOutlaws())));
 		else 
 			TownyMessaging.sendErrorMsg(player, Translatable.of("msg_specify_name"));
 	}
